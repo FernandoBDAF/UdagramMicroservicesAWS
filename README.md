@@ -148,27 +148,14 @@ docker-compose up
 ```
 
 ### 6. Continuous Integration
-- Dockerhub Repositories
+- Created dockerhub repositories
     - udagram-reverseproxy
     - udagram-api-user
     - udagram-api-feed
     - udagram-frontend
 
-```bash
-docker build -t udagram-api-feed ./udagram-api-feed
-docker tag udagram-api-feed fernandobdaf/udagram-api-feed
-
-docker build -t udagram-api-feed ./udagram-api-user
-docker tag udagram-api-feed fernandobdaf/udagram-api-user
-
-docker build -t udagram-api-feed ./udagram-frontend
-docker tag udagram-api-feed fernandobdaf/udagram-frontend
-
-docker build -t udagram-api-feed ./udagram-reverseproxy
-docker tag udagram-api-feed fernandobdaf/udagram-reverseproxy
-```
-
-- CI using CircleCI
+- Implemented CI using CircleCI
+    - folder /.circleci created
 
 
 ## Tips

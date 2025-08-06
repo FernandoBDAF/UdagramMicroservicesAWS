@@ -8,16 +8,80 @@ orbs:
   # See the Node orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@5.2
 
+# Define jobs
+jobs:
+  # Build and test all services
+  build-and-test:
+    docker:
+      - image: cimg/node:18.19
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+          cache-path: |
+            node_modules
+            */node_modules
+      - run:
+          name: Install dependencies
+          command: npm run install:all
+      - run:
+          name: Run tests
+          command: npm run test:all
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  # Build and push Docker images
+  build-and-push:
+    docker:
+      - image: cimg/base:2024.01
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.24
+      - run:
+          name: Login to Docker Hub
+          command: |
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+      - run:
+          name: Build and push udagram-api-feed
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/udagram-api-feed:$CIRCLE_SHA1 -t $DOCKERHUB_USERNAME/udagram-api-feed:latest ./udagram-api-feed
+            docker push $DOCKERHUB_USERNAME/udagram-api-feed:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/udagram-api-feed:latest
+      - run:
+          name: Build and push udagram-api-user
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/udagram-api-user:$CIRCLE_SHA1 -t $DOCKERHUB_USERNAME/udagram-api-user:latest ./udagram-api-user
+            docker push $DOCKERHUB_USERNAME/udagram-api-user:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/udagram-api-user:latest
+      - run:
+          name: Build and push udagram-frontend
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/udagram-frontend:$CIRCLE_SHA1 -t $DOCKERHUB_USERNAME/udagram-frontend:latest ./udagram-frontend
+            docker push $DOCKERHUB_USERNAME/udagram-frontend:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/udagram-frontend:latest
+      - run:
+          name: Build and push udagram-reverseproxy
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/udagram-reverseproxy:$CIRCLE_SHA1 -t $DOCKERHUB_USERNAME/udagram-reverseproxy:latest ./udagram-reverseproxy
+            docker push $DOCKERHUB_USERNAME/udagram-reverseproxy:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/udagram-reverseproxy:latest
+
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  version: 2
+  build-test-deploy:
     jobs:
-      - node/test:
-          # This is the node version to use for the `cimg/node` tag
-          # Relevant tags can be found on the CircleCI Developer Hub
-          # https://circleci.com/developer/images/image/cimg/node
-          version: '16.10'
-          # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: npm
+      - build-and-test:
+          filters:
+            branches:
+              only: main
+      - build-and-push:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: main
