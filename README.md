@@ -156,7 +156,11 @@ docker-compose up
 
 - Implemented CI using CircleCI
     - folder /.circleci created
+    - pass enviroment variables to the circleCI project
 
+#### Continuos Integration
+- Created EKS Cluster and Node Group
+- aws eks update-kubeconfig --region us-east-1 --name Demo
 
 ## Tips
 1. Take a look at `udagram-api` -- does it look like we can divide it into two modules to be deployed as separate microservices?

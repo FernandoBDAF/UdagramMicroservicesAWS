@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: udagram-api-feed-service
+  labels:
+    app: udagram-api-feed
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: udagram-api-feed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udagram-api-user-service
+  labels:
+    app: udagram-api-user
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: udagram-api-user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udagram-frontend-service
+  labels:
+    app: udagram-frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: udagram-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udagram-reverseproxy-service
+  labels:
+    app: udagram-reverseproxy
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: udagram-reverseproxy
