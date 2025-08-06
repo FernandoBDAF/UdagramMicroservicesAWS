@@ -26,7 +26,8 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "clean": "rm -rf node_modules && cd udagram-api-feed && rm -rf node_modules && cd ../udagram-api-user && rm -rf node_modules && cd ../udagram-frontend && rm -rf node_modules",
-    "clean:install": "npm run clean && npm run install:all"
+    "clean:install": "npm run clean && npm run install:all",
+    "test": "npm run test:all"
   },
   "keywords": [
     "microservices",
