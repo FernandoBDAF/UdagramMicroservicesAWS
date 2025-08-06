@@ -147,6 +147,16 @@ docker-compose -f docker-compose-build.yaml build --parallel
 docker-compose up
 ```
 
+### 6. Continuous Integration
+- Dockerhub Repositories
+    - udagram-reverseproxy
+    - udagram-api-user
+    - udagram-api-feed
+    - udagram-frontend
+
+- CI using CircleCI
+
+
 ## Tips
 1. Take a look at `udagram-api` -- does it look like we can divide it into two modules to be deployed as separate microservices?
 2. The `.dockerignore` file is included for your convenience to not copy `node_modules`. Copying this over into a Docker container might cause issues if your local environment is a different operating system than the Docker image (ex. Windows or MacOS vs. Linux).
