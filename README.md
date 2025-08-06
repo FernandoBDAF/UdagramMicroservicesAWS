@@ -24,13 +24,65 @@ Afterwards, we can prevent the file from being included in your solution by addi
 ### 1. Database
 Create a PostgreSQL database on AWS RDS. The database is used to store the application's metadata. A username and password is needed to authenticate and access the database.
 
+Edited the security group's inbound rule to allow incoming connections from anywhere (0.0.0.0/0).
+
 Once your database is set up, set the config values for environment variables prefixed with `POSTGRES_` in `set_env.sh`.
 * If you set up a local database, your `POSTGRES_HOST` is most likely `localhost`
 * If you set up an RDS database, your `POSTGRES_HOST` is most likely in the following format: `***.****.us-west-1.rds.amazonaws.com`. You can find this value in the AWS console's RDS dashboard.
 
+```bash
+psql -h mypostgres-database-1.c5szli4s4qq9.us-east-1.rds.amazonaws.com -U [username] [db-name]
+psql -h ud-final-project-633758264616.crbqs3nmr71u.us-east-1.rds.amazonaws.com -U postgres postgres
+
+\list
+\c postgres
+\dt
+```
 
 ### 2. S3
 Create an AWS S3 bucket. The S3 bucket is used to store images that are displayed in Udagram.
+
+At permissions tab, added bucket policy allowing other AWS services (Kubernetes) to access the bucket contents.
+
+```json
+{
+ "Version":"2012-10-17",
+ "Statement":[
+     {
+         "Sid":"Stmt1625306057759",
+         "Principal":"*",
+         "Action":"s3:*",
+         "Effect":"Allow",
+         "Resource":"arn:aws:s3:::[bucket-name]"
+     }
+ ]
+}
+```
+
+Also added CORS configuration:
+
+```json
+[
+	{
+		"AllowedHeaders":[
+			"*"
+		],
+		"AllowedMethods":[
+			"POST",
+			"GET",
+			"PUT",
+			"DELETE",
+			"HEAD"
+		],
+		"AllowedOrigins":[
+			"*"
+		],
+		"ExposeHeaders":[
+			
+		]
+	}
+]
+```
 
 Set the config values for environment variables prefixed with `AWS_` in `set_env.sh`.
 
