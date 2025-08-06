@@ -1,0 +1,51 @@
+{
+  "name": "udagram-microservices",
+  "version": "1.0.0",
+  "description": "Udagram microservices project with Node.js backends and Angular frontend",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && cd udagram-api-feed && npm install && cd ../udagram-api-user && npm install && cd ../udagram-frontend && npm install",
+    "build:all": "npm run build:feed && npm run build:user && npm run build:frontend",
+    "build:feed": "cd udagram-api-feed && npm run build",
+    "build:user": "cd udagram-api-user && npm run build",
+    "build:frontend": "cd udagram-frontend && npm run build",
+    "start:all": "concurrently \"npm run start:feed\" \"npm run start:user\" \"npm run start:frontend\"",
+    "start:feed": "cd udagram-api-feed && npm start",
+    "start:user": "cd udagram-api-user && npm start",
+    "start:frontend": "cd udagram-frontend && npm start",
+    "dev:all": "concurrently \"npm run dev:feed\" \"npm run dev:user\" \"npm run dev:frontend\"",
+    "dev:feed": "cd udagram-api-feed && npm run dev",
+    "dev:user": "cd udagram-api-user && npm run dev",
+    "dev:frontend": "cd udagram-frontend && npm run dev",
+    "test:all": "npm run test:feed && npm run test:user && npm run test:frontend",
+    "test:feed": "cd udagram-api-feed && npm test",
+    "test:user": "cd udagram-api-user && npm test",
+    "test:frontend": "cd udagram-frontend && npm test",
+    "docker:build": "docker-compose -f docker-compose-build.yaml build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "clean": "rm -rf node_modules && cd udagram-api-feed && rm -rf node_modules && cd ../udagram-api-user && rm -rf node_modules && cd ../udagram-frontend && rm -rf node_modules",
+    "clean:install": "npm run clean && npm run install:all"
+  },
+  "keywords": [
+    "microservices",
+    "nodejs",
+    "angular",
+    "aws",
+    "udagram"
+  ],
+  "author": "Fernando Barroso",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FernandoBDAF/UdagramMicroservicesAWS.git"
+  }
+}
