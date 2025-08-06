@@ -9,7 +9,7 @@ const credentials = fromIni({ profile: config.aws_profile });
 
 // Create S3 client
 export const s3Client = new S3Client({
-  region: config.aws_region,
+  region: config.aws_region || "us-east-1",
   credentials: credentials,
 });
 
