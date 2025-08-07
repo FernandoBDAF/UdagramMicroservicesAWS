@@ -5,6 +5,10 @@ import {AuthRouter} from './auth.router';
 
 const router: Router = Router();
 
+router.get('/health', (req: Request, res: Response) => {
+  res.send('healthy');
+});
+
 router.use('/auth', AuthRouter);
 
 router.get('/');

@@ -27,6 +27,10 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   });
 }
 
+router.get('/health', (req: Request, res: Response) => {
+  res.send('healthy');
+});
+
 // Get all feed items
 router.get('/', async (req: Request, res: Response) => {
   const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
